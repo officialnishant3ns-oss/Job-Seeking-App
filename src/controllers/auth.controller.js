@@ -1,8 +1,9 @@
-import User from '../models/user.models'
-import { sendOTP } from '../middlewares/mail.middleware'
+import User from '../models/user.models.js'
+import { sendOTP } from '../middlewares/mail.middleware.js'
 
-const SingUp = async (req, res) => {
+const SignUp = async (req, res) => {
     try {
+
         const { fullname, email, password } = req.body
         if (!fullname || !email || !password) {
             return res.status(200).json({ message: "Something is Missing" })
@@ -12,23 +13,20 @@ const SingUp = async (req, res) => {
         if (userExist) {
             return res.status(400).json({ message: "User already exists go to login" })
         }
-       const otp = Math.floor(100000 + Math.random() * 900000);
-  
-       const user = await User.create({
-           fullname,
-           email,
-           password,
-           otp:otp,
-           isVerified: false,
+
+        const otp =  Math.floor(100000 + Math.random() * 900000)
+
+        const user = await User.create({
+            fullname,
+            email,
+            password,
+            otp,
+            isVerified: false
         })
-        console.log(user)
-
-        const Sendingotp =await sendOTP(user.email,otp)
-        if(!Sendingotp){
-            return res.status(400).json({message:"Otp not sent on Email"})
-        }
-
-        const createdUser = await User.findById(user._id).select("-password ")
+        console.log(" New user created:", user.email);
+        const Sendingotp = await sendOTP(user.email, otp)
+       
+        const createdUser = await User.findById(user._id).select("-otp -password")
         if (!createdUser) {
             return res.status(500).json({ message: "Something went wrong creating the user" })
         }
@@ -37,8 +35,9 @@ const SingUp = async (req, res) => {
 
 
     } catch (error) {
+          console.error(" Signup Error:", error);
         return res.status(500).json({ message: "Something went wrong while registering" })
     }
 }
 
-export {SingUp}
+export { SignUp }

@@ -21,7 +21,7 @@ const userschema = new mongoose.Schema({
     role:{
         type:String,
         enum:["Jobseeker",'JobsGiver'],
-        required:true
+        default: "Jobseeker"
     },
     otp: {
         type: String
