@@ -1,7 +1,7 @@
 import User from '../models/user.models'
 import { sendOTP } from '../middlewares/mail.middleware'
 
-const SingIn = async (req, res) => {
+const SingUp = async (req, res) => {
     try {
         const { fullname, email, password } = req.body
         if (!fullname || !email || !password) {
@@ -12,9 +12,6 @@ const SingIn = async (req, res) => {
         if (userExist) {
             return res.status(400).json({ message: "User already exists go to login" })
         }
-
-
-       
        const otp = Math.floor(100000 + Math.random() * 900000);
   
        const user = await User.create({
@@ -26,7 +23,7 @@ const SingIn = async (req, res) => {
         })
         console.log(user)
 
-        const Sendingotp = sendOTP(user.email,otp)
+        const Sendingotp =await sendOTP(user.email,otp)
         if(!Sendingotp){
             return res.status(400).json({message:"Otp not sent on Email"})
         }
@@ -43,3 +40,5 @@ const SingIn = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while registering" })
     }
 }
+
+export {SingUp}

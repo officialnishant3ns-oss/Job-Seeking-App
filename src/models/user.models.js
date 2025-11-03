@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import bcrypt from 'bcrypt'
 const userschema = new mongoose.Schema({
     fullname: {
         type: String,
@@ -13,9 +14,14 @@ const userschema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    isVarified: {
+    isVerified: {
         type: Boolean,
         default: false
+    },
+    role:{
+        type:String,
+        enum:["Jobseeker",'JobsGiver'],
+        required:true
     },
     otp: {
         type: String
