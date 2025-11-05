@@ -29,7 +29,7 @@ const Jobseekerschema = new mongoose.Schema({
             description: String
         }
     ],
-    resumeUrl: {
+    resume: {
         type: String
     },
 

@@ -7,7 +7,7 @@ cloudinary.config({
 })
 
 
-const uploadonclodinary = async (localFilePath) => {
+const uploadoncloudinary = async (localFilePath) => {
     try {
         if (!localFilePath) {
             console.log(" File path not provided")
@@ -35,4 +35,4 @@ const uploadonclodinary = async (localFilePath) => {
 }
 
 
-export default uploadonclodinary
+export default uploadoncloudinary
