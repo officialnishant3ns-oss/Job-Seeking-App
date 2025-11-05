@@ -11,7 +11,7 @@ const Jobseekerschema = new mongoose.Schema({
       required: true
     },
     bio: {
-        type: String,
+        type: [String],
     },
     education: [
         {
