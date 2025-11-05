@@ -4,9 +4,6 @@ const Jobseekerschema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    Profilephoto:{
-        type:String
-    },
     skills: {
         type: String,
         required: true,
@@ -26,8 +23,7 @@ const Jobseekerschema = new mongoose.Schema({
         {
             company:String,
             role:String,
-            startDate:Date,
-            endDate:Date,
+            duration:Number,
             description:String
         }
     ],

@@ -16,7 +16,6 @@ const accessandrefreshtokengenerate = async (userId) => {
         return res.status(500).json({ message: "Something went wrong while generating Token" })
     }
 }
-
 const SignUp = async (req, res) => {
     try {
 
@@ -55,7 +54,6 @@ const SignUp = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while SignUp" })
     }
 }
-
 const VerifyOTP = async (req, res) => {
     try {
         const { email, otp } = req.body
@@ -82,7 +80,6 @@ const VerifyOTP = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while verifying OTP" })
     }
 }
-
 const SignIn = async (req, res) => {
     try {
         const { email, password } = req.body
@@ -124,7 +121,6 @@ const SignIn = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while SignIn" })
     }
 }
-
 const SignOut = async (req, res) => {
     try {
         await User.findByIdAndUpdate(req.user._id,
@@ -149,7 +145,46 @@ const SignOut = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while SignOut" })
     }
 }
+const ForgotPassword = async (req, res) => {
+    const { email } = req.body
+    if (!email) {
+        return res.status(200).json({ message: "Email is Missing" })
+    }
+    const user = await User.findOne({ email })
+    if (!user) {
+        return res.status(404).json({ message: "User not found" })
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000)
+    user.otp = otp
+    sendOTP(user.email, otp)
+    return res.status(200).json({ message: "OTP sent pls verify" })
+}
+const verifyResetPasswordOTP = async(req,res)=>{
+    try {
+        const { email, otp } = req.body
+        if (!email || !otp) {
+            return res.status(400).json({ message: "Email and OTP are required" })
+        }
 
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" })
+        }
+
+        if (user.otp !== otp.toString()) {
+            return res.status(400).json({ success: false, message: "Invalid OTP" })
+        }
+
+        user.isVerified = true
+        user.otp = undefined
+        await user.save()
+
+        return res.status(200).json({ success: true, message: "OTP verified successfully" })
+    } catch (error) {
+          console.error("VerifyOTP Error:", error)
+        return res.status(500).json({ message: "Something went wrong while verifying OTP" })
+    }
+}
 const UpdatePassword = async (req, res) => {
     try {
         const { oldpassword, newpassword } = req.body
@@ -176,45 +211,6 @@ const UpdatePassword = async (req, res) => {
 
 
 }
-const ForgotPassword = async (req, res) => {
-    const { email } = req.body
-    if (!email) {
-        return res.status(200).json({ message: "Email is Missing" })
-    }
-    const user = await User.findOne({ email })
-    if (!user) {
-        return res.status(404).json({ message: "User not found" })
-    }
-    const otp = Math.floor(100000 + Math.random() * 900000)
-    user.otp = otp
-    sendOTP(user.email, otp)
-    return res.status(200).json({ message: "OTP sent pls verify" })
-}
-
-//work on it 
-const ResendOtp = async (req, res) => {
-    try {
-        const { email } = req.body
-        if (!email) {
-            return res.status(200).json({ message: "Email is Missing" })
-        }
-
-        const user = await User.findOne({ email })
-        if (!user) {
-            return res.status(404).json({ message: "User not found" })
-        }
-        const otp = Math.floor(100000 + Math.random() * 900000)
-        user.otp = otp
-        await user.save()
-        sendOTP(user.email, otp)
-
-        return res.status(200).json({ message: "OTP resent successfully" })
-
-    } catch (error) {
-        console.error(" SignIn  Error:", error);
-        return res.status(500).json({ message: "Something went wrong while Resending OTP" })
-    }
-}
 
 
-export { SignUp, SignIn, VerifyOTP, SignOut, UpdatePassword, ResendOtp ,ForgotPassword}
+export { SignUp, SignIn, VerifyOTP, SignOut, UpdatePassword,verifyResetPasswordOTP ,ForgotPassword}
