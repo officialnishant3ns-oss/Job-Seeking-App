@@ -1,6 +1,7 @@
 import Jobseeker from '../models/Jobseeker.models.js'
-import JobsGivers from '../models/Jobgiver.models.js'
+
 import uploadoncloudinary from '../utils/cloudinary.js'
+
 const SeekerProfile = async (req, res) => {
   try {
     const { bio, skills, education, experience } = req.body
@@ -17,7 +18,7 @@ const SeekerProfile = async (req, res) => {
     const profile = await Jobseeker.findOneAndUpdate(
       { userId },
       { bio, skills, education, experience },
-      { new: true, upsert: true }
+      { new: true }
     )
 
     res.status(200).json({ message: "Profile updated", profile });
@@ -30,31 +31,46 @@ const SeekerProfile = async (req, res) => {
 
 const uploadResume = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user?._id || req.user?.id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized user" });
     }
-    const resumePath = req.files?.resume?.[0]?.path;
+    const resumePath = req.files?.resume[0]?.path;
     if (!resumePath) {
       return res.status(400).json({ message: "resumePath  is required.. " })
 
     }
+    console.log(resumePath)
     const resume = await uploadoncloudinary(resumePath)
 
-    if (!resume) {
-      return res.status(400).json({ message: "Resume is required.. " })
+    if (!resume?.secure_url) {
+      return res.status(400).json({ message: "Failed to upload resume. " })
     }
 
-    const profileresume = await Jobseeker.findOneAndUpdate(
-      { userId, resume: resume.url },
-      { new: true, upsert: true }
-    )
+      const resumeDetails = await Jobseeker.findOneAndUpdate(
+      { userId },
+      { resume: resume.secure_url },
+      { new: true, upsert: true ,select: " resume"}
+    );
 
-    res.status(200).json({ message: "Resume uploaded", profileresume });
+    res.status(200).json({ message: "Resume uploaded", resumeDetails });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 
 }
 
-export { SeekerProfile, uploadResume }
+const getMySeekerProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const profile = await Jobseeker.findOne({ userId });
+    if (!profile) return res.status(404).json({ message: "Profile not found" });
+    res.status(200).json(profile);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+
+
+export { SeekerProfile, uploadResume ,getMySeekerProfile}

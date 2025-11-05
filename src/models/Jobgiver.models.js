@@ -16,9 +16,7 @@ const JobsGiverschema = new mongoose.Schema({
     location: {
         type: String
     },
-    website:{
-        type:String
-    }
+  
 
 },
     { timestamps: true }
