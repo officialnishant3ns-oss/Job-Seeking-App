@@ -13,7 +13,5 @@ router.post('/SignOut',verifyJWT,SignOut)
 router.post('/updatePassword',verifyJWT,UpdatePassword)
 
 
-//profile management section
-
 
 export default router

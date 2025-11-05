@@ -21,9 +21,10 @@ app.use(cookieParser())
 
 
 //routes import for user
-import router from './routes/user.auth.js'
-app.use('/api/v1/user',router)
+import userrouter from './routes/user.auth.js'
+app.use('/api/v1/user',userrouter)
 
-
+import  profilerouter from '../src/routes/profilemanage.routes.js'
+app.use('/api/v1/jobseeker',profilerouter)
 
 export default app

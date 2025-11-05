@@ -5,9 +5,9 @@ const SeekerProfile = async (req, res) => {
   try {
     const { bio, skills, education, experience } = req.body
 
-    if (typeof skills === "string") {
-      skills = skills.split(",").map((s) => s.trim());
-    }
+    //  if (typeof skills === "string") {
+    //   skills = skills.split(",").map((s) => s.trim());
+    // }
     if (!bio || !skills || !education || !experience) {
       return res.status(400).json({ message: "something is missing" })
     }
@@ -18,6 +18,7 @@ const SeekerProfile = async (req, res) => {
       { bio, skills, education, experience },
       { new: true, upsert: true }
     )
+    
    res.status(200).json({ message: "Profile updated", profile });
 
   } catch (error) {
