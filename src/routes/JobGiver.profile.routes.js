@@ -13,5 +13,5 @@ router.post('/uploadlogo',verifyJWT,upload.fields([
     ]),
     uploadLogo
 )
-
+router.get('/profile',verifyJWT,getMyCompanyProfile)
 export default router;
