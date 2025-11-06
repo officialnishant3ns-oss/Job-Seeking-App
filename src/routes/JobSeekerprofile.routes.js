@@ -5,7 +5,7 @@ import upload from "../middlewares/multer.controller.js";
 const router = Router()
 
 
-//profile management section
+//profile management section for jobseeker there
 router.post("/profilemanage",verifyJWT, SeekerProfile)
 router.post('/uploadresume',verifyJWT,upload.fields([
         { name: "resume", maxCount: 1 }

@@ -6,7 +6,7 @@ import {JobGiverProfile,uploadLogo,getMyCompanyProfile} from '../controllers/job
 const router = Router()
 
 
-//profile management section
+//profile management section for jobgiver 
 router.post("/profilemanage",verifyJWT, JobGiverProfile)
 router.post('/uploadlogo',verifyJWT,upload.fields([
         { name: "Logo", maxCount: 1 }
