@@ -56,12 +56,12 @@ const uploadLogo = async(req,res)=>{
 }
 const getMyCompanyProfile = async (req,res) => {
     try {
-    const userId = req.user.id;
-    const company = await JobsGivers.findOne({ userId });
-    if (!company) return res.status(404).json({ message: "Profile not found" });
-    res.status(200).json(company);
+    const userId = req.user.id
+    const company = await JobsGivers.findOne({ userId })
+    if (!company) return res.status(404).json({ message: "Profile not found" })
+    res.status(200).json(company)
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message })
   }
 
 }

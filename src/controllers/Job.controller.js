@@ -5,9 +5,9 @@ import uploadoncloudinary from '../utils/cloudinary.js'
 
 const CreateJob = async (req, res) => {
     try {
-        if (req.user.role !== "JobsGiver") {
-            return res.status(403).json({ message: "Only JobsGiver can post jobs" })
-        }
+        // if (req.user.role !== "JobsGiver") {
+        //     return res.status(403).json({ message: "Only JobsGiver can post jobs" })
+        // }
         const { title, description, salary, skillsRequired, experience, jobType } = req.body
         if (!title || !description || !salary || !skillsRequired || !experience || !jobType) {
             return res.status(400).json({ message: "Something is missing" })
@@ -34,9 +34,9 @@ const CreateJob = async (req, res) => {
 
 const updateJob = async (req, res) => {
     try {
-        if (req.user.role !== "JobsGiver") {
-            return res.status(403).json({ message: "Only JobsGiver can Update jobs" })
-        }
+        // if (req.user.role !== "JobsGiver") {
+        //     return res.status(403).json({ message: "Only JobsGiver can Update jobs" })
+        // }
         const { jobId } = req.params
         const { title, description, salary, skillsRequired, experience, jobType } = req.body
         if (!title || !description || !salary || !skillsRequired || !experience || !jobType) {
@@ -58,4 +58,49 @@ const updateJob = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
-export { CreateJob, updateJob }
+
+const DeleteJobs = async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        console.log("Error", error)
+        return res.status(500).json({ error: error.message }) 
+    }
+}
+    
+//for jobseeker  
+const getjobs = async(req,res)=>{
+    try {
+        const { jobId } = req.params
+          const job = await Job.findById(jobId)
+          
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+     return res.status(200).json({
+      success: true,
+      job
+    })
+    } catch (error) {
+         console.log("Error", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+const getAllJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find({ jobGiverId: req.user.id });
+
+    return res.status(200).json({
+      success: true,
+      count: jobs.length,
+      jobs,
+    });
+  } catch (error) {
+    console.log("Error fetching jobs:", error);
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+
+
+export { CreateJob, updateJob,getjobs,getAllJobs }
