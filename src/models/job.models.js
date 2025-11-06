@@ -19,7 +19,7 @@ const jobschema = new mongoose.Schema({
         trim: true
     },
     salary: {
-        type: Number,
+        type: String,
         required: true
     },
     skillsRequired: {
@@ -27,7 +27,7 @@ const jobschema = new mongoose.Schema({
         required: true
     },
     experience: {
-        type: Number,
+        type: String,
         required:true
     },
     jobType: {
@@ -35,13 +35,7 @@ const jobschema = new mongoose.Schema({
         enum: ["Full-time", "Part-time", "Internship", "Contract", "Remote"],
         default: "Full-time",
     },
-    //not in pdf folder for status of job specifiece
-    // status: {      
-    //     type: String,
-    //     enum: ["Open", "Closed", "In Review"],
-    //     default: "Open",
-    // }
-
+   
 },
     {
         timestamps: true

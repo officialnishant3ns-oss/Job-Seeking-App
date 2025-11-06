@@ -18,7 +18,7 @@ const SeekerProfile = async (req, res) => {
     const profile = await Jobseeker.findOneAndUpdate(
       { userId },
       { bio, skills, education, experience },
-      { new: true }
+      { new: true,upsert: true }
     )
 
     res.status(200).json({ message: "Profile updated", profile });
