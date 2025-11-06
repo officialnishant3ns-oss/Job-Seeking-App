@@ -1,6 +1,5 @@
 import Job from '../models/job.models.js'
-import JobApplication from '../models/application.models.js'
-import uploadoncloudinary from '../utils/cloudinary.js'
+
 
 
 const CreateJob = async (req, res) => {
@@ -108,7 +107,7 @@ const getjobs = async(req,res)=>{
 }
 const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find({ jobGiverId: req.user.id });
+    const jobs = await Job.find({ jobGiverId: req.user.id })
 
     return res.status(200).json({
       success: true,
@@ -116,8 +115,8 @@ const getAllJobs = async (req, res) => {
       jobs,
     });
   } catch (error) {
-    console.log("Error fetching jobs:", error);
-    return res.status(500).json({ error: error.message });
+    console.log("Error fetching jobs:", error)
+    return res.status(500).json({ error: error.message })
   }
 }
 
