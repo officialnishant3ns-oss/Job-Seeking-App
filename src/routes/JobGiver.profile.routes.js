@@ -2,7 +2,7 @@ import { Router } from "express";
 import verifyJWT from "../middlewares/auth.middleware.js"
 import upload from "../middlewares/multer.controller.js";
 import {JobGiverProfile,uploadLogo,getMyCompanyProfile} from '../controllers/jobGiver.controller.js'
-
+import {CreateJob} from '../controllers/Job.controller.js'
 const router = Router()
 
 
@@ -14,4 +14,5 @@ router.post('/uploadlogo',verifyJWT,upload.fields([
     uploadLogo
 )
 router.get('/profile',verifyJWT,getMyCompanyProfile)
+router.get('/createjob',verifyJWT,CreateJob)
 export default router;

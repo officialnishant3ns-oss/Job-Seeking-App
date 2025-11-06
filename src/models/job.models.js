@@ -36,11 +36,11 @@ const jobschema = new mongoose.Schema({
         default: "Full-time",
     },
     //not in pdf folder for status of job specifiece
-    status: {      
-        type: String,
-        enum: ["Open", "Closed", "In Review"],
-        default: "Open",
-    }
+    // status: {      
+    //     type: String,
+    //     enum: ["Open", "Closed", "In Review"],
+    //     default: "Open",
+    // }
 
 },
     {

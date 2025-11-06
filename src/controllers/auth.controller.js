@@ -21,7 +21,7 @@ const SignUp = async (req, res) => {
 
         const { fullname, email, password } = req.body
         if (!fullname || !email || !password) {
-            return res.status(200).json({ message: "Something is Missing" })
+            return res.status(400).json({ message: "Something is Missing" })
         }
 
         const userExist = await User.findOne({ email })
@@ -211,6 +211,6 @@ const UpdatePassword = async (req, res) => {
 
 
 }
-
+//reset password at time of or after otp verification we have to confirm and password there
 
 export { SignUp, SignIn, VerifyOTP, SignOut, UpdatePassword,verifyResetPasswordOTP ,ForgotPassword}

@@ -12,17 +12,13 @@ const applicationschema = new mongoose.Schema({
     },
     resume: {
         type: String,
+        required:true
     },
     status: {
         type: String,
-        enum: ["Sent", "Application viewed", "Interview","Rejected", "Hired"],
+        enum: ["Sent", "Application viewed", "Interview", "Rejected", "Hired"],
         default: "Sent"
-    },
-    appliedat: {
-        type: Date,
-        default: Date.now
     }
-
 },
     { timestamps: true }
 )
