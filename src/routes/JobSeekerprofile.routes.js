@@ -3,6 +3,7 @@ import { SeekerProfile,uploadResume,getMySeekerProfile } from '../controllers/jo
 import verifyJWT from "../middlewares/auth.middleware.js"
 import upload from "../middlewares/multer.controller.js";
 import { getjobs, getAllJobs} from '../controllers/Job.controller.js'
+import { ApplyforJob } from '../controllers/Application.controllers.js'
 const router = Router()
 
 
@@ -18,6 +19,15 @@ router.get('/profile',verifyJWT,getMySeekerProfile)
 //routes for jobseeker
 router.get('/getjob/:jobId', getjobs)
 router.get('/getalljob',verifyJWT, getAllJobs)
+
+
+//apply for job
+router.post(
+    "/applyjob/:jobId",
+    verifyJWT,
+    upload.fields([{ name: "resume", maxCount: 1 }]),
+    ApplyforJob
+)
 
 export default router;
 
