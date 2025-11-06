@@ -35,7 +35,8 @@ const jobschema = new mongoose.Schema({
         enum: ["Full-time", "Part-time", "Internship", "Contract", "Remote"],
         default: "Full-time",
     },
-    status: {
+    //not in pdf folder for status of job specifiece
+    status: {      
         type: String,
         enum: ["Open", "Closed", "In Review"],
         default: "Open",
