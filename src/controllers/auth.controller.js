@@ -23,14 +23,14 @@ const SignUp = async (req, res) => {
         if (!fullname || !email || !password || !confirmpassword) {
             return res.status(400).json({ message: "Something is Missing" })
         }
-       if (password !== confirmpassword) {
-      return res.status(400).json({ message: "Password and confirm password do not match" });
-    }
-
+        
         const userExist = await User.findOne({ email })
         if (userExist) {
             return res.status(400).json({ message: "User already exists go to SignIn" })
         }
+        if (password !== confirmpassword) {
+       return res.status(400).json({ message: "Password and confirm password do not match" });
+     }
 
         const otp = Math.floor(100000 + Math.random() * 900000)
 
@@ -38,6 +38,7 @@ const SignUp = async (req, res) => {
             fullname,
             email,
             password,
+            confirmpassword,
             otp,
             isVerified: false
         })
@@ -215,6 +216,5 @@ const UpdatePassword = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong while updating password" });
   }
 }
-//reset password at time of or after otp verification we have to confirm and password there
 
 export { SignUp, Login, VerifyOTP, Logout, UpdatePassword,verifyResetPasswordOTP ,ForgotPassword}
