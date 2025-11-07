@@ -5,10 +5,10 @@ const jobschema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
-    JobSeekerId: {
-        type: mongoose.Schema.Types.ObjectId,   //question there 
-        ref: "User"
-    },
+    // JobSeekerId: {
+    //     type: mongoose.Schema.Types.ObjectId,   //question there 
+    //     ref: "User"
+    // },
     title: {
         type: String,
         required: true,
@@ -34,7 +34,7 @@ const jobschema = new mongoose.Schema({
         type: String,
         enum: ["Full-time", "Part-time", "Internship", "Contract", "Remote"],
         default: "Full-time",
-    },
+    }
    
 },
     {

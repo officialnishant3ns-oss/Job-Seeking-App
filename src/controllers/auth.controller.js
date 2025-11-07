@@ -19,10 +19,13 @@ const accessandrefreshtokengenerate = async (userId) => {
 const SignUp = async (req, res) => {
     try {
 
-        const { fullname, email, password } = req.body
-        if (!fullname || !email || !password) {
+        const { fullname, email, password,confirmpassword } = req.body
+        if (!fullname || !email || !password || !confirmpassword) {
             return res.status(400).json({ message: "Something is Missing" })
         }
+       if (password !== confirmpassword) {
+      return res.status(400).json({ message: "Password and confirm password do not match" });
+    }
 
         const userExist = await User.findOne({ email })
         if (userExist) {
@@ -80,7 +83,7 @@ const VerifyOTP = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while verifying OTP" })
     }
 }
-const SignIn = async (req, res) => {
+const Login = async (req, res) => {
     try {
         const { email, password } = req.body
         if (!email || !password) {
@@ -121,7 +124,7 @@ const SignIn = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while SignIn" })
     }
 }
-const SignOut = async (req, res) => {
+const Logout = async (req, res) => {
     try {
         await User.findByIdAndUpdate(req.user._id,
             {
@@ -186,31 +189,32 @@ const verifyResetPasswordOTP = async(req,res)=>{
     }
 }
 const UpdatePassword = async (req, res) => {
-    try {
-        const { oldpassword, newpassword } = req.body
-        if (!oldpassword || !newpassword) {
-            return res.status(200).json({ message: "Something is Missing" })
-        }
-        const user = await User.findOne({ email })
-        if (!user) {
-            return res.status(404).json({ message: "User not found" })
-        }
-     const Passwordcheck =  await user.isPassword(oldpassword)
-     if (!Passwordcheck) {
-         return res.status(400).json({ message: "OldPassword not valid" })
-     }
-       user.password = newpassword
-  await user.save({ validateBeforeSave: false })
+  try {
+    const { oldpassword, newpassword } = req.body;
 
-  return res.status(200).json({  message: "Password updated successfully"},user={oldpassword,newpassword})
-
-    } catch (error) {
-        console.error(" SignIn  Error:", error);
-        return res.status(500).json({ message: "Something went wrong while Updating Password" })
+    if (!oldpassword || !newpassword) {
+      return res.status(400).json({ message: "Both old and new passwords are required." });
     }
 
+    const user = await User.findById(req.user?._id)
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
 
+    const isMatch = await user.isPassword(oldpassword);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" })
+    }
+
+    user.password = newpassword
+    await user.save()
+
+    return res.status(200).json({ message: "Password updated successfully" })
+  } catch (error) {
+    console.error("UpdatePassword Error:", error);
+    return res.status(500).json({ message: "Something went wrong while updating password" });
+  }
 }
 //reset password at time of or after otp verification we have to confirm and password there
 
-export { SignUp, SignIn, VerifyOTP, SignOut, UpdatePassword,verifyResetPasswordOTP ,ForgotPassword}
+export { SignUp, Login, VerifyOTP, Logout, UpdatePassword,verifyResetPasswordOTP ,ForgotPassword}

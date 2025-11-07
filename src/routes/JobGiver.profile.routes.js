@@ -13,7 +13,7 @@ router.post('/uploadlogo', verifyJWT, upload.fields([
 ]),
     uploadLogo
 )
-router.get('/profile', verifyJWT, getMyCompanyProfile)
+router.get('/profile/', getMyCompanyProfile)
 
 //routes for jobs
 router.post('/createjob', verifyJWT, CreateJob)

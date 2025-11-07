@@ -6,10 +6,6 @@ const SeekerProfile = async (req, res) => {
   try {
     const { bio, skills, education, experience } = req.body
 
-    let skillsArray = skills;
-    if (typeof skills === "string") {
-      skillsArray = skills.split(",").map((s) => s.trim());
-    }
     if (!bio || !skills || !education || !experience) {
       return res.status(400).json({ message: "something is missing" })
     }
@@ -62,7 +58,7 @@ const uploadResume = async (req, res) => {
 
 const getMySeekerProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const { userId } = req.body.id;
     const profile = await Jobseeker.findOne({ userId });
     if (!profile) return res.status(404).json({ message: "Profile not found" });
     res.status(200).json(profile);
