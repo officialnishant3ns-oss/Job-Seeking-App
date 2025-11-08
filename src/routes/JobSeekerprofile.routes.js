@@ -14,7 +14,7 @@ router.post('/uploadresume',verifyJWT,upload.fields([
     ]),
     uploadResume
 )
-router.get('/profile',getMySeekerProfile)   // by id checking that should be done there
+router.get('/profile',verifyJWT,getMySeekerProfile)   
 
 //routes for jobseeker
 router.get('/getjob/:jobId', getjobs)  
