@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose"    //similary or we can say that is company 
 const JobsGiverschema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -15,8 +15,7 @@ const JobsGiverschema = new mongoose.Schema({
     },
     location: {
         type: String
-    },
-  
+    }
 
 },
     { timestamps: true }

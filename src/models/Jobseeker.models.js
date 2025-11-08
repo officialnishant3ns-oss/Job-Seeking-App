@@ -8,10 +8,10 @@ const Jobseekerschema = new mongoose.Schema({
     },
     skills: {
         type: [String],
-      required: true
+        required: true
     },
-    bio: {// missing
-        type: [String],
+    bio: {
+        type: [String]
     },
     education: [
         {
