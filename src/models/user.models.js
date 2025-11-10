@@ -72,3 +72,6 @@ userschema.methods.generateRefreshToken = function () {
 
 const User = mongoose.model('User', userschema)
 export default User
+
+
+//sandgrid or bravo

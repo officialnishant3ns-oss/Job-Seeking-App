@@ -42,7 +42,7 @@ const SignUp = async (req, res) => {
             isVerified: false
         })
         console.log(" New user created:", user.email);
-         await sendOTP(user.email, otp)
+        //  await sendOTP(user.email, otp)
 
         const createdUser = await User.findById(user._id).select("-otp -password")
         if (!createdUser) {
