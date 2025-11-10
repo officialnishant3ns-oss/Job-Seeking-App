@@ -14,15 +14,19 @@ const userschema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: true
+    },
+    confirmpassword: {
+        type: String,
+        required: true
     },
     isVerified: {
         type: Boolean,
         default: false
     },
-    role:{
-        type:String,
-        enum:["Jobseeker",'JobsGiver'],
+    role: {
+        type: String,
+        enum: ["Jobseeker", 'JobsGiver'],
         default: "Jobseeker"
     },
     otp: {

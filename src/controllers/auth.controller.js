@@ -19,8 +19,8 @@ const accessandrefreshtokengenerate = async (userId) => {
 const SignUp = async (req, res) => {
     try {
 
-        const { fullname, email, password,confirmpassword } = req.body
-        if (!fullname || !email || !password || !confirmpassword) {
+        const { fullname, email, password,role,confirmpassword } = req.body
+        if (!fullname || !email || !password || !role || !confirmpassword) {
             return res.status(400).json({ message: "Something is Missing" })
         }
         
@@ -38,7 +38,6 @@ const SignUp = async (req, res) => {
             fullname,
             email,
             password,
-            confirmpassword,
             otp,
             isVerified: false
         })
