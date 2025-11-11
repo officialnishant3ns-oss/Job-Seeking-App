@@ -1,6 +1,5 @@
 import User from '../models/user.models.js'
-import { sendOTP } from '../middlewares/mail.middleware.js'
-
+import sendOtpEmail from '../utils/email.js'
 
 const accessandrefreshtokengenerate = async (userId) => {
     try {
@@ -42,8 +41,8 @@ const SignUp = async (req, res) => {
             isVerified: false
         })
         console.log(" New user created:", user.email);
-        //  await sendOTP(user.email, otp)
-
+        //  await sendOtpEmail(user.email, otp)
+       
         const createdUser = await User.findById(user._id).select("-otp -password")
         if (!createdUser) {
             return res.status(500).json({ message: "Something went wrong creating the user" })

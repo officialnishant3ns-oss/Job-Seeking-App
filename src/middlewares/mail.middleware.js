@@ -1,6 +1,6 @@
 import transporter from '../middlewares/mail.confiq.js'
 
-export const sendOTP = async (email, otp) => {
+ const sendOTP = async (email, otp) => {
     try {
         const response = await transporter.sendMail({
           
@@ -22,3 +22,4 @@ export const sendOTP = async (email, otp) => {
           throw new Error('Failed to send OTP email')
     }
 }
+// export default sendOTP
