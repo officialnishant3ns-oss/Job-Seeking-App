@@ -25,7 +25,7 @@ const SignUp = async (req, res) => {
 
         const userExist = await User.findOne({ email })
         if (userExist) {
-            return res.status(400).json({ message: "User already exists go to SignIn" })
+            return res.status(400).json({ message: "User already exists go to login" })
         }
         if (password !== confirmpassword) {
             return res.status(400).json({ message: "Password and confirm password do not match" });
@@ -158,6 +158,7 @@ const ForgotPassword = async (req, res) => {
         return res.status(404).json({ message: "User not found" })
     }
     const otp = Math.floor(100000 + Math.random() * 900000)
+    user.otp = otp
     user.otpExpires = Date.now() + 10 * 60 * 1000
     user.isVerified = false
     await user.save()
@@ -175,9 +176,9 @@ const verifyResetPasswordOTP = async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" })
         }
-     if (user.otpExpires && user.otpExpires < Date.now()) {
-      return res.status(400).json({ success: false, message: "OTP expired" });
-    }
+        if (user.otpExpires && user.otpExpires < Date.now()) {
+            return res.status(400).json({ success: false, message: "OTP expired" });
+        }
         if (String(user.otp) !== String(otp)) {
             return res.status(400).json({ success: false, message: "Invalid OTP" });
         }
@@ -195,23 +196,22 @@ const verifyResetPasswordOTP = async (req, res) => {
 }
 const createnewpassword = async (req, res) => {
     try {
-        const { newpassword, confirmpassword } = req.body
-        if (!newpassword || !confirmpassword) {
-            return res.status(400).json({ message: "Something is Missing" })
-        }
-        const user = await User.findById(req.user?._id)
-        if (!user) {
-            return res.status(404).json({ message: "User not found" })
-        }
-        
-        if (newpassword !== confirmpassword) {
-            return res
-                .status(400)
-                .json({ message: "Password and confirm password do not match" });
-        }
-    if (!user.isVerified) {
-      return res.status(403).json({ message: "OTP verification required" });
+          const { email, newpassword, confirmpassword } = req.body;
+
+    if (!email || !newpassword || !confirmpassword) {
+      return res.status(400).json({ message: "Something is missing" });
     }
+         const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (newpassword !== confirmpassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+        if (!user.isVerified) {
+            return res.status(403).json({ message: "OTP verification required" });
+        }
 
         user.password = newpassword
         await user.save()
