@@ -31,4 +31,9 @@ import Giverprofilerouter from './routes/JobGiver.profile.routes.js'
 app.use('/api/v1/jobgiver',Giverprofilerouter)
 
 
+import job from '../src/routes/Job.routes.js'
+app.use('/api/v1/job',job)
+
+import application from '../src/routes/application.routes.js'
+app.use('/api/v1/application',application)
 export default app
