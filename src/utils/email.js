@@ -21,7 +21,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
           <p>This OTP will expire in <strong>5 minutes</strong>.</p>
           <p>If you did not request this, please ignore this email.</p>
           <br/>
-          <p style="color: #0d7a98ff;">— Team Job Application App</p>
+          <p style="color: #0d7a98ff;">—- Team Job Application App</p>
         </div>
       `,
     }

@@ -27,6 +27,9 @@ const userschema = new mongoose.Schema({
     },
     otp: {
         type: String
+    },
+    otpExpires:{
+        type:String
     }
 
 },
