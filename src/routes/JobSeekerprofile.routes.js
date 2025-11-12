@@ -16,10 +16,6 @@ router.post('/uploadresume',verifyJWT,upload.fields([
 )
 router.get('/profile',verifyJWT,getMySeekerProfile)   
 
-//routes for jobseeker
-router.get('/getjob/:jobId', getjobs)  
-router.get('/getalljob', getAllJobs)
-
 
 //apply for job
 router.post(

@@ -37,20 +37,22 @@ const updateJob = async (req, res) => {
       return res.status(403).json({ message: "Only JobsGiver can Update jobs" })
     }
     const { jobId } = req.params
-    const { title, description, salary, skillsRequired, experience, jobType } = req.body
-    if (!title || !description || !salary || !skillsRequired || !experience || !jobType) {
-      return res.status(400).json({ message: "Something is missing" })
+    if(!jobId){
+      return res.status(400).json({ message: "Job ID is required" })
     }
-    const updatedJob = await Job.findOneAndUpdate(
-      { _id: jobId, jobGiverId: req.user.id },
-      { title, description, salary, skillsRequired, experience, jobType },
-      { new: true }
+       const updatedJob = await Job.findOneAndUpdate(
+      { _id: jobId, jobGiverId: req.user._id },
+      { $set: req.body },
+      { new: true, runValidators: true }
     )
     if (!updatedJob) {
       return res.status(404).json({ message: "Job not found or unauthorized" });
     }
-    return res.status(200).json({ success: true, message: "Job Updated Successfully", updatedJob })
-
+      return res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      updatedJob,
+    })
 
   } catch (error) {
     console.log("Error", error)
@@ -88,7 +90,7 @@ const DeleteJobs = async (req, res) => {
 
 
 
-const getjobs = async (req, res) => {
+const getjobsbyId = async (req, res) => {
   try {
     const { jobId } = req.params
     const job = await Job.findById(jobId)
@@ -122,4 +124,4 @@ const getAllJobs = async (req, res) => {
 
 
 
-export { CreateJob, updateJob, getjobs, getAllJobs, DeleteJobs }
+export { CreateJob, updateJob, getjobsbyId, getAllJobs, DeleteJobs }
