@@ -113,9 +113,8 @@ const getAllJobs = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      count: jobs.length,
       jobs,
-    });
+    })
   } catch (error) {
     console.log("Error fetching jobs:", error)
     return res.status(500).json({ error: error.message })

@@ -8,6 +8,11 @@ const ApplyforJob = async (req, res) => {
         const { jobId } = req.params;
         const userId = req.user._id
 
+    if (req.user.role !== "Jobseeker") {
+      return res.status(403).json({ message: "Only Jobseeker can apply for jobs" })
+    }
+
+
         const resumePath = req.files?.resume[0]?.path;
         if (!resumePath) {
             return res.status(400).json({ message: "resumePath  is required.. " })
