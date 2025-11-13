@@ -1,16 +1,15 @@
-import JobApplication from '../models/application.models.js'
 import uploadoncloudinary from '../utils/cloudinary.js'
-
+import JobApplication from '../models/application.models.js'
 
 
 const ApplyforJob = async (req, res) => {
     try {
-        const { jobId } = req.params;
+        const { jobId } = req.params
         const userId = req.user._id
 
-    if (req.user.role !== "Jobseeker") {
-      return res.status(403).json({ message: "Only Jobseeker can apply for jobs" })
-    }
+        if (req.user.role !== "Jobseeker") {
+            return res.status(403).json({ message: "Only Jobseeker can apply for jobs" })
+        }
 
 
         const resumePath = req.files?.resume[0]?.path;
@@ -46,4 +45,49 @@ const ApplyforJob = async (req, res) => {
     }
 }
 
-export { ApplyforJob }
+const myapplication = async (req, res) => {
+    try {
+        const application = await JobApplication.findOne({ applicant: req.user._id })
+        if (!application) {
+            return res.status(404).json({ message: "Profile not found" })
+        }
+        res.status(200).json({ application, message: "My application for job" })
+    } catch (error) {
+        console.log("Error fetching jobs:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+const updatestatus = async (req, res) => {
+    try {
+        const { applicationId } = req.params
+
+
+        if (req.user.role !== "JobsGiver") {
+            return res.status(403).json({ message: "Only JobsGiver can Edit" })
+        }
+
+        const { status } = req.body
+        if (!status) {
+            return res.status(400).json({ message: "Status is required" })
+        }
+
+        const app = await JobApplication.findById(applicationId)
+        if (!app) {
+            return res.status(404).json({ message: "Application not found" })
+        }
+
+        app.status = status;
+        await app.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Status updated successfully",
+            updatedApplication: app,
+        })
+    } catch (error) {
+        console.error("Error updating job status:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+
+export { ApplyforJob, myapplication, updatestatus }

@@ -25,6 +25,9 @@ const userschema = new mongoose.Schema({
         enum: ["Jobseeker", 'JobsGiver'],
         default: "Jobseeker"
     },
+     refresstoken: {
+        type: String
+    },
     otp: {
         type: String
     },

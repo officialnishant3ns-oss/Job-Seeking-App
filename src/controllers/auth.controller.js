@@ -7,7 +7,7 @@ const accessandrefreshtokengenerate = async (userId) => {
         const refreshtoken = await user.generateRefreshToken()
         const accesstoken = await user.generateAccessToken()
 
-        user.refreshtoken = refreshtoken
+        user.refresstoken = refreshtoken
         await user.save({ validateBeforeSave: true })
         return { accesstoken, refreshtoken }
     } catch (error) {
@@ -249,5 +249,4 @@ const UpdatePassword = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while updating password" });
     }
 }
-
 export { SignUp, Login, VerifyOTP, Logout, createnewpassword, UpdatePassword, verifyResetPasswordOTP, ForgotPassword }

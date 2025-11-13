@@ -60,7 +60,6 @@ const updateJob = async (req, res) => {
   }
 }
 
-
 const DeleteJobs = async (req, res) => {
   try {
     if (req.user.role !== "JobsGiver") {
@@ -87,9 +86,6 @@ const DeleteJobs = async (req, res) => {
   }
 }
 
-
-
-
 const getjobsbyId = async (req, res) => {
   try {
     const { jobId } = req.params
@@ -107,6 +103,7 @@ const getjobsbyId = async (req, res) => {
     return res.status(500).json({ error: error.message })
   }
 }
+
 const getAllJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ jobGiverId: req.user.id })
