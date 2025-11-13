@@ -45,9 +45,9 @@ const ApplyforJob = async (req, res) => {
     }
 }
 
-const myapplication = async (req, res) => {
+const myapplication = async (req, res) => { // for like if joobseeker want to see their application id 
     try {
-        const application = await JobApplication.findOne({ applicant: req.user._id })
+        const application = await JobApplication.find({ JobSeekerId: req.user._id })
         if (!application) {
             return res.status(404).json({ message: "Profile not found" })
         }
@@ -57,6 +57,7 @@ const myapplication = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
+
 const updatestatus = async (req, res) => {
     try {
         const { applicationId } = req.params

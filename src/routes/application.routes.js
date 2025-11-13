@@ -6,7 +6,7 @@ const router = Router()
 
 //apply for job >>>jobseeker
 router.post( "/applyjob/:jobId", verifyJWT,upload.fields([{ name: "resume", maxCount: 1 }]),  ApplyforJob)
-router.get('/getapplication',myapplication)
-router.patch('/updatestatus',updatestatus)
+router.get('/getapplication',verifyJWT,myapplication)
+router.patch('/updatestatus',verifyJWT,updatestatus)
 export default router;
 
