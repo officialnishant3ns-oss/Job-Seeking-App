@@ -8,15 +8,18 @@ const CreateJob = async (req, res) => {
     if (req.user.role !== "JobsGiver") {
       return res.status(403).json({ message: "Only JobsGiver can post jobs" })
     }
-    const { title, description, salary, skillsRequired, experience, jobType } = req.body
-    if (!title || !description || !salary || !skillsRequired || !experience || !jobType) {
+    const { title, description, salaryMin, salaryMax, skillsRequired, experience, jobType, location, category, tags, experienceLevel } = req.body;
+
+    if (!title || !description || !salaryMin || !salaryMax || !skillsRequired || !experience || !jobType || !location) {
       return res.status(400).json({ message: "Something is missing" })
     }
+    if (salaryMin < 0 || salaryMax <= 0 || salaryMax < salaryMin) {
+      return res.status(400).json({ message: "Invalid salary range" })
+    }
 
-      const userId = req.user?._id || req.user?.id;
+    const userId = req.user?._id || req.user?.id;
 
     const companyProfile = await JobsGivers.findOne({ userId })
-    // console.log("Company Profile Found:", companyProfile)
 
     if (!companyProfile) {
       return res.status(404).json({ message: "Company profile not found" })
@@ -24,13 +27,22 @@ const CreateJob = async (req, res) => {
     const job = await Job.create({
       jobGiverId: req.user._id,
       companyName: companyProfile.companyName,
+
       title,
       description,
-      salary,
+      location,
+      category,
+      tags: tags || [],
+      experienceLevel,
+
+      salary: {
+        min: salaryMin,
+        max: salaryMax
+      },
+
       skillsRequired,
       experience,
       jobType
-
     })
     return res.status(200).json({ success: true, message: "Job created Successfully", job })
   } catch (error) {
@@ -45,10 +57,10 @@ const updateJob = async (req, res) => {
       return res.status(403).json({ message: "Only JobsGiver can Update jobs" })
     }
     const { jobId } = req.params
-    if(!jobId){
+    if (!jobId) {
       return res.status(400).json({ message: "Job ID is required" })
     }
-       const updatedJob = await Job.findOneAndUpdate(
+    const updatedJob = await Job.findOneAndUpdate(
       { _id: jobId, jobGiverId: req.user._id },
       { $set: req.body },
       { new: true, runValidators: true }
@@ -56,7 +68,7 @@ const updateJob = async (req, res) => {
     if (!updatedJob) {
       return res.status(404).json({ message: "Job not found or unauthorized" });
     }
-      return res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Job updated successfully",
       updatedJob,
@@ -114,7 +126,7 @@ const getjobsbyId = async (req, res) => {
 }
 
 //for seeker there we goining to add search filter
-const getAllJobs = async (req, res) => {   
+const getAllJobs = async (req, res) => {
   try {
     const jobs = await Job.find({ jobGiverId: req.user.id })
 
