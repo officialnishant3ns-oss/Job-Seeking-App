@@ -45,7 +45,7 @@ const ApplyforJob = async (req, res) => {
     }
 }
 
-const myapplication = async (req, res) => { // for like if joobseeker want to see their application id 
+const myallapplication = async (req, res) => { // for like if joobseeker want to see their application id 
     try {
         const application = await JobApplication.find({ JobSeekerId: req.user._id })
         if (!application) {
@@ -90,5 +90,23 @@ const updatestatus = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
+const getApplicationbyJobgiver = async (req, res) => {
+    try {
+        const { jobId } = req.params.jobId
+        if (req.user.role !== "JobsGiver") {
+            return res.status(403).json({ message: "Only JobsGiver can Edit" })
+        }
+        const getapplication = await JobApplication.findById({ job: jobId }).populate("applicant", "name email skills bio resume")
+            .populate("job", "jobTitle")
+        if (!getapplication) {
+            return res.status(400).json({ message: "application not found" })
+        }
+        res.status(200).json(getapplication)
+    } catch (error) {
+        console.error("Error checking applied job by jobseeker:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
 
-export { ApplyforJob, myapplication, updatestatus }
+
+export { ApplyforJob, myallapplication, updatestatus,getApplicationbyJobgiver }
