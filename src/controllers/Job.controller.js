@@ -54,31 +54,57 @@ const CreateJob = async (req, res) => {
 const updateJob = async (req, res) => {
   try {
     if (req.user.role !== "JobsGiver") {
-      return res.status(403).json({ message: "Only JobsGiver can Update jobs" })
+      return res.status(403).json({ message: "Only JobsGiver can update jobs" })
     }
+
     const { jobId } = req.params
     if (!jobId) {
       return res.status(400).json({ message: "Job ID is required" })
     }
+
+    let updatedData = { ...req.body }  //ye ... shallow clone banata hai 
+
+    const blockedFields = ["jobGiverId", "companyName", "createdAt", "updatedAt", "__v"]
+    blockedFields.forEach(field => delete updatedData[field])
+
+    if (updatedData.salaryMin !== undefined && updatedData.salaryMax !== undefined) {
+      const { salaryMin, salaryMax } = updatedData
+
+      if (salaryMin < 0 || salaryMax < 0 || salaryMax < salaryMin) {
+        return res.status(400).json({ message: "Invalid salary range" })
+      }
+
+      updatedData.salary = {
+        min: salaryMin,
+        max: salaryMax
+      }
+
+      delete updatedData.salaryMin
+      delete updatedData.salaryMax
+    }
+
     const updatedJob = await Job.findOneAndUpdate(
       { _id: jobId, jobGiverId: req.user._id },
-      { $set: req.body },
+      { $set: updatedData },
       { new: true, runValidators: true }
     )
+
     if (!updatedJob) {
-      return res.status(404).json({ message: "Job not found or unauthorized" });
+      return res.status(404).json({ message: "Job not found or unauthorized" })
     }
+
     return res.status(200).json({
       success: true,
       message: "Job updated successfully",
-      updatedJob,
+      updatedJob
     })
 
   } catch (error) {
-    console.log("Error", error)
+    console.log("Error updating job:", error)
     return res.status(500).json({ error: error.message })
   }
 }
+
 
 const DeleteJobs = async (req, res) => {
   try {
