@@ -1,4 +1,5 @@
 import Job from '../models/job.models.js'
+import JobsGivers from '../models/Jobgiver.models.js'
 
 
 
@@ -12,8 +13,17 @@ const CreateJob = async (req, res) => {
       return res.status(400).json({ message: "Something is missing" })
     }
 
+      const userId = req.user?._id || req.user?.id;
+
+    const companyProfile = await JobsGivers.findOne({ userId })
+    // console.log("Company Profile Found:", companyProfile)
+
+    if (!companyProfile) {
+      return res.status(404).json({ message: "Company profile not found" })
+    }
     const job = await Job.create({
       jobGiverId: req.user._id,
+      companyName: companyProfile.companyName,
       title,
       description,
       salary,
@@ -22,8 +32,6 @@ const CreateJob = async (req, res) => {
       jobType
 
     })
-
-
     return res.status(200).json({ success: true, message: "Job created Successfully", job })
   } catch (error) {
     console.log("Error", error)
@@ -86,6 +94,7 @@ const DeleteJobs = async (req, res) => {
   }
 }
 
+// for seeker
 const getjobsbyId = async (req, res) => {
   try {
     const { jobId } = req.params
@@ -104,7 +113,8 @@ const getjobsbyId = async (req, res) => {
   }
 }
 
-const getAllJobs = async (req, res) => {
+//for seeker there we goining to add search filter
+const getAllJobs = async (req, res) => {   
   try {
     const jobs = await Job.find({ jobGiverId: req.user.id })
 
