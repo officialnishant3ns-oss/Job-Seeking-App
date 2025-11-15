@@ -21,5 +21,23 @@ const savedjob = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while Saving Jobs" })
     }
 }
+const getSavedJob = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).populate("savedjob")
 
-export { savedjob}
+        if (!user) {
+            return res.status(404).json({ message: "User not found" })
+        }
+
+        return res.status(200).json({
+            success: true,
+            savedjob: user.savedjob
+        });
+    } catch (error) {
+        console.error(" Error:", error);
+        return res.status(500).json({ message: "Something went wrong while geting saved Jobs" })
+    }
+}
+
+
+export { savedjob, getSavedJob }
