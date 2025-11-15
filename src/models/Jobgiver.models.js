@@ -5,10 +5,27 @@ const JobsGiverschema = new mongoose.Schema({
         ref: "User",
         required: true
     },
+    fullname: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    jobtitle: {
+        type: String
+    },
     companyName: {
         type: String,
         required: true,
         trim: true
+    },
+    location: {
+        type: String,
+        default: "Not specified"
+    },
+    contactEmail: {
+        type: String,
+        required: true,
+        unique: true
     },
     logo: {
         type: String
@@ -18,9 +35,11 @@ const JobsGiverschema = new mongoose.Schema({
         type: String,
         default: "No description provided"
     },
-    location: {
-        type: String,
-        default: "Not specified"
+    specialization: {
+        type: String
+    },
+    aboutcompany: {
+        type: String
     }
 
 },
