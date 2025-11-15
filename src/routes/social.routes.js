@@ -13,8 +13,9 @@ router.get('/getsavedjobs',verifyJWT,getSavedJob)
 
 //following vala portion
 router.post('/follow/:userId',verifyJWT,followUser)
+//>>unfollow vala portion """TODO"
 
+//post vala portion >>> get feed ka routes """TODO"
 
-//
 
 export default router
