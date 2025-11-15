@@ -6,21 +6,49 @@ const Jobseekerschema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    skills: {
-        type: [String],
-        required: true
+    firstName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+
+    lastName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    phonenumber: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    chooselanguage: {
+        type: String,
+        enum: ["Hindi", "English", "Urdu"],
+        default: "Hindi"
     },
     bio: {
-        type: [String]
+        type: String
+    },
+    resume: {
+        type: String
     },
     education: [
         {
             degree: String,
             institution: String,
-            startYear: Date,
-            endYear: Date
+            year: Number
         }
     ],
+    skills: {
+        type: [String],
+        required: true
+    },
     experience: [
         {
             company: String,
@@ -28,11 +56,7 @@ const Jobseekerschema = new mongoose.Schema({
             duration: Number,
             description: String
         }
-    ],
-    resume: {
-        type: String
-    },
-
+    ]
 
 },
     { timestamps: true }
