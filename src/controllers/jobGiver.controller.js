@@ -3,9 +3,9 @@ import uploadoncloudinary from '../utils/cloudinary.js'
 
 const JobGiverProfile = async (req, res) => {
   try {
-    const { companyName, description, location } = req.body
-    if (!companyName || !description || !location) {
-      return res.status(400).json({ message: "All fields (companyName, description, location) are required" })
+    const {fullname,jobtitle,contactEmail,specialization,aboutcompany, companyName, description, location } = req.body
+    if (!fullname || !contactEmail  ||!companyName || !description || !location) {
+      return res.status(400).json({ message: "All fields (companyName, description, location,fullname,contactEmail) are required" })
     }
     const userId = req.user?._id || req.user?.id
     if (!userId) {
@@ -13,7 +13,7 @@ const JobGiverProfile = async (req, res) => {
     }
     const company = await JobsGivers.findOneAndUpdate(
       { userId },
-      { companyName, description, location },
+      { fullname,jobtitle,contactEmail,specialization,aboutcompany, companyName, description, location  },
       { new: true, upsert: true }
     )
     res.status(200).json({ message: "Company profile updated", company })
