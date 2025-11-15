@@ -38,6 +38,26 @@ const getSavedJob = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while geting saved Jobs" })
     }
 }
+const unsaveJob = async (req, res) => {
+    try {
+        const user = req.user
+        const jobId = req.params.jobId
+
+        if (user.savedjob.includes(jobId)) {
+
+            user.savedjob.pull(jobId)
+            await user.save()
+            return res.status(200).json({ success: true, message: "Job UnSaved" }
+            )
+        }
+        else{
+             return res.status(200).json({ success: false, message: "Job Not Saved" })
+        }
+    } catch (error) {
+        console.error(" Error:", error);
+        return res.status(500).json({ message: "Something went wrong while Saving Jobs" })
+    }
+}
 
 
-export { savedjob, getSavedJob }
+export { savedjob, getSavedJob, unsaveJob }
