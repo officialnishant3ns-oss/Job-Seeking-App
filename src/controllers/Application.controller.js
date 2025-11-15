@@ -77,8 +77,8 @@ const updatestatus = async (req, res) => {
             return res.status(404).json({ message: "Application not found" })
         }
 
-        app.status = status;
-        await app.save();
+        app.status = status
+        await app.save()
 
         return res.status(200).json({
             success: true,
@@ -90,18 +90,26 @@ const updatestatus = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
+
 const getApplicationbyJobgiver = async (req, res) => {
     try {
-        const { jobId } = req.params.jobId
         if (req.user.role !== "JobsGiver") {
             return res.status(403).json({ message: "Only JobsGiver can Edit" })
         }
-        const getapplication = await JobApplication.findById({ job: jobId }).populate("applicant", "name email skills bio resume")
-            .populate("job", "jobTitle")
-        if (!getapplication) {
-            return res.status(400).json({ message: "application not found" })
+        const { jobId } = req.params
+        console.log(jobId)
+        if (!jobId) {
+            return res.status(400).json({ message: "Job ID is required" });
         }
-        res.status(200).json(getapplication)
+
+        const applications = await JobApplication.find({ job: jobId })
+            .populate("applicant", "firstName lastName email skills bio resume")
+            .populate("job", "title companyName")
+
+        if (!applications || applications.length === 0) {
+            return res.status(404).json({ message: "No applications found for this job" })
+        }
+        res.status(200).json({ success: true, count: applications.length, applications })
     } catch (error) {
         console.error("Error checking applied job by jobseeker:", error)
         return res.status(500).json({ error: error.message })
@@ -109,4 +117,4 @@ const getApplicationbyJobgiver = async (req, res) => {
 }
 
 
-export { ApplyforJob, myallapplication, updatestatus,getApplicationbyJobgiver }
+export { ApplyforJob, myallapplication, updatestatus, getApplicationbyJobgiver }

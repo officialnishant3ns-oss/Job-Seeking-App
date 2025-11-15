@@ -24,7 +24,6 @@ const JobGiverProfile = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong while giver profile management" })
   }
 }
-
 const uploadLogo = async (req, res) => {
   try {
     const userId = req.user?._id || req.user?.id
@@ -60,7 +59,6 @@ const uploadLogo = async (req, res) => {
     return res.status(500).json({ error: err.message })
   }
 }
-
 const getMyCompanyProfile = async (req, res) => {
   try {
     const userId = req.user.id

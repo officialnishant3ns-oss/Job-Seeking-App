@@ -47,7 +47,6 @@ const SeekerProfile = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong while Seeker profile manegement" })
   }
 }
-
 const uploadResume = async (req, res) => {
   try {
     const userId = req.user?._id || req.user?.id;
@@ -78,8 +77,6 @@ const uploadResume = async (req, res) => {
   }
 
 }
-
-
 const getMySeekerProfile = async (req, res) => {  //if particular jobseeker looking for their profile view then for that we can ud=se this
   try {
     const userId = req.user.id;

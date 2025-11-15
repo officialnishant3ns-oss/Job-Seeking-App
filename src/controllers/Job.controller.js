@@ -50,7 +50,6 @@ const CreateJob = async (req, res) => {
     return res.status(500).json({ error: error.message })
   }
 }
-
 const updateJob = async (req, res) => {
   try {
     if (req.user.role !== "JobsGiver") {
@@ -106,7 +105,6 @@ const updateJob = async (req, res) => {
     return res.status(500).json({ error: error.message })
   }
 }
-
 const DeleteJobs = async (req, res) => {
   try {
     if (req.user.role !== "JobsGiver") {
@@ -132,7 +130,6 @@ const DeleteJobs = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 }
-
 // for seeker
 const getjobsbyId = async (req, res) => {
   try {
@@ -151,7 +148,6 @@ const getjobsbyId = async (req, res) => {
     return res.status(500).json({ error: error.message })
   }
 }
-
 //for seeker there we going to add search filter
 const getAllJobs = async (req, res) => {
   // console.log(req.query)

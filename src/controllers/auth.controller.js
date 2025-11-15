@@ -249,4 +249,5 @@ const UpdatePassword = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while updating password" });
     }
 }
+
 export { SignUp, Login, VerifyOTP, Logout, createnewpassword, UpdatePassword, verifyResetPasswordOTP, ForgotPassword }
