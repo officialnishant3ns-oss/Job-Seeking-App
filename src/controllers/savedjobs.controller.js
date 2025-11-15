@@ -54,7 +54,7 @@ const unsaveJob = async (req, res) => {
              return res.status(200).json({ success: false, message: "Job Not Saved" })
         }
     } catch (error) {
-        console.error(" Error:", error);
+        console.error(" Error:", error)
         return res.status(500).json({ message: "Something went wrong while UnSaving Jobs" })
     }
 }
