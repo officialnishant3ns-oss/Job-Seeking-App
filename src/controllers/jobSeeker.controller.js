@@ -4,20 +4,40 @@ import uploadoncloudinary from '../utils/cloudinary.js'
 
 const SeekerProfile = async (req, res) => {
   try {
-    const { bio, skills, education, experience } = req.body
+    const {
+      firstName,
+      lastName,
+      email,
+      phonenumber,
+      chooselanguage,
+      bio,
+      education,
+      skills,
+      experience
+    } = req.body
 
-    if (!bio || !skills || !education || !experience) {
-      return res.status(400).json({ message: "something is missing" })
+    if (!firstName || !lastName || !email || !chooselanguage || !phonenumber || !skills) {
+      return res.status(400).json({ message: "Required fields are missing" });
     }
     const userId = req.user?._id || req.user?.id
-        if (!userId) {
-            return res.status(401).json({ message: "Unauthorized user" });
-        }
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized user" });
+    }
 
     const profile = await Jobseeker.findOneAndUpdate(
       { userId },
-      { bio, skills, education, experience },
-      { new: true,upsert: true }
+      {
+        firstName,
+        lastName,
+        email,
+        phonenumber,
+        chooselanguage,
+        bio,
+        education,
+        skills,
+        experience
+      },
+      { new: true, upsert: true }
     )
 
     res.status(200).json({ message: "Profile updated", profile });
@@ -46,7 +66,7 @@ const uploadResume = async (req, res) => {
       return res.status(400).json({ message: "Failed to upload resume. " })
     }
 
-      const resumeDetails = await Jobseeker.findOneAndUpdate(
+    const resumeDetails = await Jobseeker.findOneAndUpdate(
       { userId },
       { resume: resume.secure_url },
       { new: true, upsert: true }
@@ -70,4 +90,4 @@ const getMySeekerProfile = async (req, res) => {  //if particular jobseeker look
     res.status(500).json({ error: err.message });
   }
 }
-export { SeekerProfile, uploadResume ,getMySeekerProfile}
+export { SeekerProfile, uploadResume, getMySeekerProfile }
