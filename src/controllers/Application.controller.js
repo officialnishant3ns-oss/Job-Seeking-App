@@ -44,7 +44,6 @@ const ApplyforJob = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
-
 const myallapplication = async (req, res) => { // for like if joobseeker want to see their application id 
     try {
         const application = await JobApplication.find({ JobSeekerId: req.user._id })
@@ -57,7 +56,6 @@ const myallapplication = async (req, res) => { // for like if joobseeker want to
         return res.status(500).json({ error: error.message })
     }
 }
-
 const updatestatus = async (req, res) => {
     try {
         const { applicationId } = req.params
@@ -90,7 +88,6 @@ const updatestatus = async (req, res) => {
         return res.status(500).json({ error: error.message })
     }
 }
-
 const getApplicationbyJobgiver = async (req, res) => {
     try {
         if (req.user.role !== "JobsGiver") {

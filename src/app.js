@@ -36,4 +36,7 @@ app.use('/api/v1/job',job)
 
 import application from '../src/routes/application.routes.js'
 app.use('/api/v1/application',application)
+
+import Social from '../src/routes/social.routes.js'
+app.use('/api/v1/social',Social)
 export default app

@@ -25,17 +25,38 @@ const userschema = new mongoose.Schema({
         enum: ["Jobseeker", 'JobsGiver'],
         default: "Jobseeker"
     },
-     refresstoken: {
+    refresstoken: {
         type: String
     },
     otp: {
         type: String
     },
-    otpExpires:{
-        type:String
-    }
+    otpExpires: {
+        type: String
+    },
+    savedjob: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Job"
+        }
+    ]
+    ,
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
 
 },
+
     { timestamps: true }
 )
 userschema.pre("save", async function (next) {
@@ -79,5 +100,3 @@ userschema.methods.generateRefreshToken = function () {
 const User = mongoose.model('User', userschema)
 export default User
 
-
-//sandgrid or bravo
