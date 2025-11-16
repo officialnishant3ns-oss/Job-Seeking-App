@@ -11,7 +11,7 @@ const followUser = async (req, res) => {
         const user = await User.findById(myself)
         const ToFollow = await User.findById(otherTofollow)
         if (!user || !ToFollow) {
-            return res.status(404).json({ message: "User not found" })
+            return res.status(404).json({ message: "User OR Following person not found" })
         }
         const alreadyFollowing = user.following.some(
             id => id.toString() === otherTofollow.toString()

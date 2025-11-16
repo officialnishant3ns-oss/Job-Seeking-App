@@ -33,7 +33,20 @@ const createPost = async (req, res) => {
     }
 }
 
+const getFeed = async (req, res) => {
+    try {
+        const following = req.user.following
+
+        const feed = await Post.find({ createdBy: { $in: [...following, req.user._id] } }).populate({
+            path: "createdBy",
+            select: "fullname email"
+        }).sort({ createdAt: -1 })
+
+        return res.status(200).json({ success: true, feed });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
 
 
-
-export { createPost }
+export { createPost, getFeed }

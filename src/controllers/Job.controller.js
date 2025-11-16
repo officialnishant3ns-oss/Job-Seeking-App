@@ -17,7 +17,7 @@ const CreateJob = async (req, res) => {
       return res.status(400).json({ message: "Invalid salary range" })
     }
 
-    const userId = req.user?._id || req.user?.id;
+    const userId = req.user?._id || req.user?.id
 
     const companyProfile = await JobsGivers.findOne({ userId })
 
@@ -27,7 +27,6 @@ const CreateJob = async (req, res) => {
     const job = await Job.create({
       jobGiverId: req.user._id,
       companyName: companyProfile.companyName,
-
       title,
       description,
       location,
@@ -114,7 +113,7 @@ const DeleteJobs = async (req, res) => {
     const deleted = await Job.findOneAndDelete({
       _id: jobId,
       jobGiverId: req.user._id,
-    });
+    })
 
     if (!deleted) {
       return res.status(404).json({ message: "Job not found or unauthorized" });
@@ -150,7 +149,6 @@ const getjobsbyId = async (req, res) => {
 }
 //for seeker there we going to add search filter
 const getAllJobs = async (req, res) => {
-  // console.log(req.query)
   try {
     const { title, companyName, location, category, jobType, experienceLevel, minSalary, maxSalary, datePosted } = req.query
 
