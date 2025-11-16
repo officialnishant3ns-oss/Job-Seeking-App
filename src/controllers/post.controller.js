@@ -32,7 +32,6 @@ const createPost = async (req, res) => {
         return res.status(500).json({ message: "Something went wrong while Posting SocialPost" })
     }
 }
-
 const getFeed = async (req, res) => {
     try {
         const following = req.user.following
@@ -47,7 +46,6 @@ const getFeed = async (req, res) => {
         res.status(500).json({ message: err.message })
     }
 }
-
 const likepost = async (req, res) => {
     try {
         const { postId } = req.params
@@ -86,7 +84,7 @@ const commentonpost = async (req, res) => {
             return res.status(404).json({ message: "Please write Something In Comments" })
         }
 
-        post.comments.push({ user: userId, commenttext: commenttext })
+        post.comments.push({ user: userId, commenttext })
         await post.save()
 
 
@@ -100,4 +98,7 @@ const commentonpost = async (req, res) => {
 
     }
 }
+
+
+
 export { createPost, getFeed, likepost, commentonpost }
