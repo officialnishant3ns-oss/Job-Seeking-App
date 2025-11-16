@@ -44,9 +44,34 @@ const getFeed = async (req, res) => {
 
         return res.status(200).json({ success: true, feed });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
     }
 }
 
+const likepost = async (req, res) => {
+    try {
+        const { postId } = req.params
+        const userId = req.user.id
+        const post = await Post.findById(postId)
 
-export { createPost, getFeed }
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" })
+        }
+        if (post.likes.includes(userId)) {
+            post.likes.pull(userId)
+            await post.save()
+            return res.status(200).json({ message: "Unliked successfully", success: true })
+        }
+        post.likes.push(userId)
+        await post.save()
+        return res.status(200).json({ message: "liked successfully", success: true })
+
+    } catch (error) {
+        console.error(" Error:", error)
+        return res.status(500).json({ message: "Something went wrong while liking SocialPost" })
+
+    }
+
+}
+
+export { createPost, getFeed, likepost }
