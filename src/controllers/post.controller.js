@@ -1,18 +1,31 @@
 import Post from '../models/post.models.js'
+import uploadoncloudinary from '../utils/cloudinary.js'
 
 const createPost = async (req, res) => {
     try {
-        const { text, mediaUrl, mediaType } = req.body
+        const { text, mediaType } = req.body
+        const mediaUrl = req.files?.mediaUrl[0]?.path
         if (!text && !mediaUrl) {
             return res.status(400).json({ message: "Post cannot be empty. Add text or media." })
         }
+        console.log(mediaUrl)
+
+        const postmedia = await uploadoncloudinary(mediaUrl)
+        if (!postmedia?.secure_url) {
+            return res.status(400).json({ message: "Failed to upload post media. " })
+        }
+
         const newPost = await Post.create({
             text,
-            mediaUrl,
+            mediaUrl: postmedia?.secure_url,
             mediaType,
             createdBy: req.user.id
         })
-        res.status(201).json({ message: "Post Created", newPost })
+        const populatedPost = await newPost.populate({
+            path: "createdBy",
+            select: "fullname email"
+        })
+        res.status(201).json({ message: "Post Created", newPost: populatedPost })
 
     } catch (error) {
         console.error(" Error:", error)

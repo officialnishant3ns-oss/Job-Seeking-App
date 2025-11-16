@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { SeekerProfile,uploadResume,getMySeekerProfile } from '../controllers/jobSeeker.controller.js'
 import verifyJWT from "../middlewares/auth.middleware.js"
-import upload from "../middlewares/multer.controller.js";
+import upload from "../middlewares/multer.controller.js"
 
 const router = Router()
 
