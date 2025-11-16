@@ -33,7 +33,7 @@ const PostSchema = new mongoose.Schema(
                     ref: "User"
                 },
                 commenttext: {
-                    String
+                    type: String
                 },
                 createdAt: {
                     type: Date,

@@ -3,7 +3,7 @@ import verifyJWT from "../middlewares/auth.middleware.js"
 import upload from "../middlewares/multer.controller.js";
 import { savedjob, getSavedJob, unsaveJob } from "../controllers/savedjobs.controller.js"
 import { followUser } from '../controllers/follow.controller.js'
-import { createPost ,getFeed} from '../controllers/post.controller.js'
+import { createPost ,getFeed,likepost,commentonpost} from '../controllers/post.controller.js'
 const router = Router()
 
 
@@ -25,4 +25,6 @@ router.post('/makepost', verifyJWT, upload.fields([
     { name: "mediaUrl", maxCount: 2 }
 ]), createPost)
 router.get('/getfeed',verifyJWT,getFeed)
+router.post('/likepost/:postId',verifyJWT,likepost)
+router.post('/comment/:postId',verifyJWT,commentonpost)
 export default router

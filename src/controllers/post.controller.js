@@ -73,5 +73,31 @@ const likepost = async (req, res) => {
     }
 
 }
+const commentonpost = async (req, res) => {
+    try {
+        const { postId } = req.params
+        const userId = req.user.id
+        const post = await Post.findById(postId)
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" })
+        }
+        const { commenttext } = req.body
+        if (!commenttext) {
+            return res.status(404).json({ message: "Please write Something In Comments" })
+        }
 
-export { createPost, getFeed, likepost }
+        post.comments.push({ user: userId, commenttext: commenttext })
+        await post.save()
+
+
+        const updatedPost = await Post.findById(postId)
+            .populate("comments.user", "name")
+        return res.status(200).json({ message: "comments successfully", success: true, comments: updatedPost.comments })
+
+    } catch (error) {
+        console.error(" Error:", error)
+        return res.status(500).json({ message: "Something went wrong while commenting on SocialPost" })
+
+    }
+}
+export { createPost, getFeed, likepost, commentonpost }
