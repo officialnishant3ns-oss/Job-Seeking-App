@@ -15,7 +15,6 @@ const ApplyforJob = async (req, res) => {
         const resumePath = req.files?.resume[0]?.path;
         if (!resumePath) {
             return res.status(400).json({ message: "resumePath  is required.. " })
-
         }
         console.log(resumePath)
         const resume = await uploadoncloudinary(resumePath)
