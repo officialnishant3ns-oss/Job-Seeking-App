@@ -7,7 +7,6 @@ const SeekerProfile = async (req, res) => {
     const {
       firstName,
       lastName,
-      email,
       phonenumber,
       chooselanguage,
       bio,
@@ -16,20 +15,20 @@ const SeekerProfile = async (req, res) => {
       experience
     } = req.body
 
-    if (!firstName || !lastName || !email || !chooselanguage || !phonenumber || !skills) {
-      return res.status(400).json({ message: "Required fields are missing" });
-    }
-    const userId = req.user?._id || req.user?.id
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized user" });
+    if (!firstName || !lastName || !phonenumber || !skills) {
+      return res.status(400).json({ message: "Required fields are missing" })
     }
 
-    const profile = await Jobseeker.findOneAndUpdate(
+    const userId = req.user?._id
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized user" })
+    }
+
+    let profile = await Jobseeker.findOneAndUpdate(
       { userId },
       {
         firstName,
         lastName,
-        email,
         phonenumber,
         chooselanguage,
         bio,
@@ -37,14 +36,31 @@ const SeekerProfile = async (req, res) => {
         skills,
         experience
       },
-      { new: true, upsert: true }
+      { new: true, runValidators: true }
     )
 
-    res.status(200).json({ message: "Profile updated", profile });
+    if (!profile) {
+      profile = await Jobseeker.create({
+        userId,
+        firstName,
+        lastName,
+        phonenumber,
+        chooselanguage,
+        bio,
+        education,
+        skills,
+        experience
+      })
+    }
 
+    return res.status(200).json({
+      message: "Profile saved successfully",
+      profile
+    })
   } catch (error) {
-    console.error(" Error:", error);
-    return res.status(500).json({ message: "Something went wrong while Seeker profile manegement" })
+    return res.status(500).json({
+      message: "Something went wrong while managing seeker profile"
+    })
   }
 }
 const uploadResume = async (req, res) => {

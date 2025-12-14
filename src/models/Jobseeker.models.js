@@ -1,66 +1,56 @@
 import mongoose from "mongoose"
-const Jobseekerschema = new mongoose.Schema({
+
+const JobSeekerSchema = new mongoose.Schema(
+  {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-        unique: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true
     },
     firstName: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true
     },
-
     lastName: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      trim: true
     },
     phonenumber: {
-        type: Number,
-        required: true,
-        unique: true
+      type: Number,
+      required: true
     },
     chooselanguage: {
-        type: String,
-        enum: ["Hindi", "English", "Urdu"],
-        default: "Hindi"
+      type: String,
+      enum: ["Hindi", "English", "Urdu"],
+      default: "Hindi"
     },
-    bio: {
-        type: String
-    },
-    resume: {
-        type: String
-    },
+    bio: String,
+    resume: String,
     education: [
-        {
-            degree: String,
-            institution: String,
-            year: Number
-        }
+      {
+        degree: String,
+        institution: String,
+        year: Number
+      }
     ],
     skills: {
-        type: [String],
-        required: true
+      type: [String],
+      required: true
     },
     experience: [
-        {
-            company: String,
-            role: String,
-            duration: Number,
-            description: String
-        }
+      {
+        company: String,
+        role: String,
+        duration: Number,
+        description: String
+      }
     ]
-
-},
-    { timestamps: true }
+  },
+  { timestamps: true }
 )
 
-const Jobseeker = mongoose.model('Jobseeker', Jobseekerschema)
-export default Jobseeker
+const JobSeeker = mongoose.model("JobSeeker", JobSeekerSchema)
+export default JobSeeker
