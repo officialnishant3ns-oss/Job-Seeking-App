@@ -58,9 +58,7 @@ const SeekerProfile = async (req, res) => {
       profile
     })
   } catch (error) {
-    return res.status(500).json({
-      message: "Something went wrong while managing seeker profile"
-    })
+     res.status(500).json({ error: error.message });
   }
 }
 const uploadResume = async (req, res) => {
