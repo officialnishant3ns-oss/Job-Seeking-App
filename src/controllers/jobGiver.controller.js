@@ -24,29 +24,64 @@ const JobGiverProfile = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong while giver profile management" })
   }
 }
+// const uploadLogo = async (req, res) => {
+//   try {
+//     const userId = req.user?._id || req.user?.id
+//     if (!userId) {
+//       return res.status(401).json({ message: "Unauthorized user" })
+//     }
+
+//     const logoPath = req.files.logo[0].buffer
+
+//     if (!logoPath) {
+//       return res.status(400).json({ message: "Logo file is required" })
+//     }
+
+//     console.log("Logo path:", logoPath)
+
+//     const uploadedLogo = await uploadoncloudinary(logoPath);
+//     if (!uploadedLogo?.secure_url) {
+//       return res.status(400).json({ message: "Failed to upload logo" })
+//     }
+
+//     const updatedCompany = await JobsGivers.findOneAndUpdate(
+//       { userId },
+//       { logo: uploadedLogo.secure_url }, 
+//       { new: true, upsert: true }
+//     );
+
+//     return res.status(200).json({
+//       message: "Logo uploaded successfully",
+//       logoUrl: uploadedLogo.secure_url,
+//       company: updatedCompany,
+//     });
+//   } catch (err) {
+//     console.error("Error in uploadLogo:", err)
+//     return res.status(500).json({ error: err.message })
+//   }
+// }
 const uploadLogo = async (req, res) => {
   try {
-    const userId = req.user?._id || req.user?.id
+    const userId = req.user?._id || req.user?.id;
     if (!userId) {
-      return res.status(401).json({ message: "Unauthorized user" })
+      return res.status(401).json({ message: "Unauthorized user" });
     }
 
-    const logoPath = req.files.logo[0].buffer
-
-    if (!logoPath) {
-      return res.status(400).json({ message: "Logo file is required" })
+    // 🔴 IMPORTANT: req.files exists ONLY if upload.fields() is used
+    if (!req.files || !req.files.logo || req.files.logo.length === 0) {
+      return res.status(400).json({ message: "Logo file is required" });
     }
 
-    console.log("Logo path:", logoPath)
+    const logoFile = req.files.logo[0];
 
-    const uploadedLogo = await uploadoncloudinary(logoPath);
+    const uploadedLogo = await uploadoncloudinary(logoFile.buffer);
     if (!uploadedLogo?.secure_url) {
-      return res.status(400).json({ message: "Failed to upload logo" })
+      return res.status(400).json({ message: "Failed to upload logo" });
     }
 
     const updatedCompany = await JobsGivers.findOneAndUpdate(
       { userId },
-      { logo: uploadedLogo.secure_url }, 
+      { logo: uploadedLogo.secure_url },
       { new: true, upsert: true }
     );
 
@@ -56,10 +91,11 @@ const uploadLogo = async (req, res) => {
       company: updatedCompany,
     });
   } catch (err) {
-    console.error("Error in uploadLogo:", err)
-    return res.status(500).json({ error: err.message })
+    console.error("uploadLogo error:", err);
+    return res.status(500).json({ error: err.message });
   }
-}
+};
+
 const getMyCompanyProfile = async (req, res) => {
   try {
     const userId = req.user.id
