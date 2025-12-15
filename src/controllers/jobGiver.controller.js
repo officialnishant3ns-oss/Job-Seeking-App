@@ -31,7 +31,8 @@ const uploadLogo = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized user" })
     }
 
-    const logoPath = req.files?.logo?.[0]?.path
+    const logoPath = req.files.logo[0].buffer
+
     if (!logoPath) {
       return res.status(400).json({ message: "Logo file is required" })
     }
