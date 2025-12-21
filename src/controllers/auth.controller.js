@@ -18,7 +18,7 @@ const accessandrefreshtokengenerate = async (userId) => {
 const SignUp = async (req, res) => {
     try {
 
-        const { fullname, email, password, role, confirmpassword } = req.body
+        const { fullname, email, password, confirmpassword } = req.body
         if (!fullname || !email || !password || !confirmpassword) {
             return res.status(400).json({ message: "Something is Missing" })
         }
@@ -37,7 +37,7 @@ const SignUp = async (req, res) => {
             fullname,
             email,
             password,
-            role: role,
+            role: null,
             otp,
             isVerified: false
         })
@@ -55,6 +55,45 @@ const SignUp = async (req, res) => {
     } catch (error) {
         console.error(" Signup Error:", error);
         return res.status(500).json({ success: false, message: "Something went wrong while SignUp" })
+    }
+}
+const roleSelection = async (req, res) => {
+    try {
+        const { role } = req.body
+        const userId = req.user._id
+
+        if (!role) {
+            return res.status(400).json({
+                success: false, message: "Role is required"
+            })
+        }
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+        if (!user.isVerified) {
+            return res.status(403).json({
+                success: false,
+                message: "Please verify your email before selecting a role"
+            })
+        }
+
+        user.role = role
+        await user.save()
+
+        return res.status(200).json({
+            success: true,
+            message: "Role selected successfully",
+            role: user.role
+        })
+
+    } catch (error) {
+        console.error(" Role slection Error:", error)
+        return res.status(500).json({ success: false, message: "Something went wrong while role selction" })
     }
 }
 const VerifyOTP = async (req, res) => {
@@ -196,19 +235,19 @@ const verifyResetPasswordOTP = async (req, res) => {
 }
 const createnewpassword = async (req, res) => {
     try {
-          const { email, newpassword, confirmpassword } = req.body;
+        const { email, newpassword, confirmpassword } = req.body;
 
-    if (!email || !newpassword || !confirmpassword) {
-      return res.status(400).json({ message: "Something is missing" });
-    }
-         const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+        if (!email || !newpassword || !confirmpassword) {
+            return res.status(400).json({ message: "Something is missing" });
+        }
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
-    if (newpassword !== confirmpassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
-    }
+        if (newpassword !== confirmpassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
         if (!user.isVerified) {
             return res.status(403).json({ message: "OTP verification required" });
         }
@@ -250,4 +289,4 @@ const UpdatePassword = async (req, res) => {
     }
 }
 
-export { SignUp, Login, VerifyOTP, Logout, createnewpassword, UpdatePassword, verifyResetPasswordOTP, ForgotPassword }
+export { SignUp, roleSelection, Login, VerifyOTP, Logout, createnewpassword, UpdatePassword, verifyResetPasswordOTP, ForgotPassword }

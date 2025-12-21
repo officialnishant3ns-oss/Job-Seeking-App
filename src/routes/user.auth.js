@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {SignUp,Logout,VerifyOTP,Login,verifyResetPasswordOTP,createnewpassword,UpdatePassword,ForgotPassword} from '../controllers/auth.controller.js'
+import {SignUp,roleSelection,Logout,VerifyOTP,Login,verifyResetPasswordOTP,createnewpassword,UpdatePassword,ForgotPassword} from '../controllers/auth.controller.js'
 import verifyJWT from "../middlewares/auth.middleware.js";
 const router =Router()
 
@@ -7,6 +7,7 @@ const router =Router()
 router.post('/SignUp',SignUp)
 router.post('/verifyOTP',VerifyOTP)
 router.post('/login',Login)
+router.post('/roleselection',verifyJWT,roleSelection)
 router.post('/forgotpassword',ForgotPassword)
 router.post('/verifyresetOTP',verifyResetPasswordOTP)
 router.post('/newpassword',createnewpassword)
