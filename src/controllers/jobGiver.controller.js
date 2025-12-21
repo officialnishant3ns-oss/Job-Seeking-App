@@ -67,7 +67,6 @@ const uploadLogo = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized user" });
     }
 
-    // 🔴 IMPORTANT: req.files exists ONLY if upload.fields() is used
     if (!req.files || !req.files.logo || req.files.logo.length === 0) {
       return res.status(400).json({ message: "Logo file is required" });
     }
