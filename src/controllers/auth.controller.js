@@ -67,6 +67,14 @@ const roleSelection = async (req, res) => {
                 success: false, message: "Role is required"
             })
         }
+        const ALLOWED_ROLES = ["Jobseeker", "JobsGiver"]
+        if (!ALLOWED_ROLES.includes(role)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid role selected"
+            })
+        }
+
 
         const user = await User.findById(userId)
         if (!user) {
