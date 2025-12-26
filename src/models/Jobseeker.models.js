@@ -29,25 +29,33 @@ const JobSeekerSchema = new mongoose.Schema(
         },
         bio: String,
         resume: String,
-        education: [
-            {
-                degree: String,
-                institution: String,
-                year: Number
-            }
-        ],
+        // education: [
+        //     {
+        //         degree: String,
+        //         institution: String,
+        //         year: Number
+        //     }
+        // ],
+        education: {
+            type: String,
+             required: true
+        },
         skills: {
             type: [String],
             required: true
         },
-        experience: [
-            {
-                company: String,
-                role: String,
-                duration: Number,
-                description: String
-            }
-        ]
+        // experience: [
+        //     {
+        //         company: String,
+        //         role: String,
+        //         duration: Number,
+        //         description: String
+        //     }
+        // ]
+        experience:{
+            type:String,
+           required: true
+        }
     },
     { timestamps: true }
 )

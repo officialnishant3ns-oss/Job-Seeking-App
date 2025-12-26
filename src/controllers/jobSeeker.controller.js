@@ -124,14 +124,14 @@ const uploadResume = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+}
 
 const getMySeekerProfile = async (req, res) => {  //if particular jobseeker looking for their profile view then for that we can ud=se this
   try {
     const userId = req.user.id;
     const profile = await Jobseeker.findOne({ userId });
-    if (!profile) return res.status(404).json({ message: "Profile not found" });
-    res.status(200).json(profile);
+    if (!profile) return res.status(404).json({ message: "Profile not found" })
+    res.status(200).json(profile)
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
