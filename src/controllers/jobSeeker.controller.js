@@ -58,39 +58,74 @@ const SeekerProfile = async (req, res) => {
       profile
     })
   } catch (error) {
-     res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 }
+// const uploadResume = async (req, res) => {
+//   try {
+//     const userId = req.user?._id || req.user?.id;
+//     if (!userId) {
+//       return res.status(401).json({ message: "Unauthorized user" });
+//     }
+//     const resumePath = req.files?.resume[0]?.path;
+//     if (!resumePath) {
+//       return res.status(400).json({ message: "resumePath  is required.. " })
+
+//     }
+//     console.log(resumePath)
+//     const resume = await uploadoncloudinary(resumePath)
+
+//     if (!resume?.secure_url) {
+//       return res.status(400).json({ message: "Failed to upload resume. " })
+//     }
+
+//     const resumeDetails = await Jobseeker.findOneAndUpdate(
+//       { userId },
+//       { resume: resume.secure_url },
+//       { new: true, upsert: true }
+//     )
+
+//     res.status(200).json({ message: "Resume uploaded", resumeDetails })
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+
+// }
 const uploadResume = async (req, res) => {
   try {
     const userId = req.user?._id || req.user?.id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized user" });
     }
-    const resumePath = req.files?.resume[0]?.path;
-    if (!resumePath) {
-      return res.status(400).json({ message: "resumePath  is required.. " })
 
+    //  CHANGE 1: read buffer instead of path
+    const resumeFile = req.files?.resume?.[0];
+    if (!resumeFile) {
+      return res.status(400).json({ message: "Resume file is required" });
     }
-    console.log(resumePath)
-    const resume = await uploadoncloudinary(resumePath)
+
+    // CHANGE 2: upload buffer to Cloudinary
+    const resume = await uploadoncloudinary(resumeFile.buffer);
 
     if (!resume?.secure_url) {
-      return res.status(400).json({ message: "Failed to upload resume. " })
+      return res.status(400).json({ message: "Failed to upload resume" });
     }
 
     const resumeDetails = await Jobseeker.findOneAndUpdate(
       { userId },
       { resume: resume.secure_url },
       { new: true, upsert: true }
-    )
+    );
 
-    res.status(200).json({ message: "Resume uploaded", resumeDetails })
+    res.status(200).json({
+      message: "Resume uploaded successfully",
+      resumeDetails,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
 
-}
 const getMySeekerProfile = async (req, res) => {  //if particular jobseeker looking for their profile view then for that we can ud=se this
   try {
     const userId = req.user.id;
