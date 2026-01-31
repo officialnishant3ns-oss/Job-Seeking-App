@@ -15,7 +15,7 @@ router.delete('/deletejob/:jobId', verifyJWT, DeleteJobs)
 
 // Jobseeker
 router.get('/getjob/:jobId', getjobsbyId)  
-router.get('/getalljob',verifyJWT, getAllJobs)
+router.get('/getalljob', getAllJobs)
 
 
 export default router;

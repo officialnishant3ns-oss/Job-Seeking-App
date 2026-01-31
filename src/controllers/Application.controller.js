@@ -90,7 +90,7 @@ const updatestatus = async (req, res) => {
 const getApplicationbyJobgiver = async (req, res) => {
     try {
         if (req.user.role !== "JobsGiver") {
-            return res.status(403).json({ message: "Only JobsGiver can Edit" })
+            return res.status(403).json({ message: "Only JobsGiver can Look For All Aplication" })
         }
         const { jobId } = req.params
         console.log(jobId)
